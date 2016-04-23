@@ -10,7 +10,7 @@ defmodule Orders do
       else
         net_amount
       end
-      [ {:total_amount, total} | order ]
+      order ++ [ {:total_amount, Float.round(total, 2)} ]
     end)
   end
 end
