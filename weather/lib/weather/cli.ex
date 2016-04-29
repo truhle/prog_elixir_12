@@ -12,10 +12,10 @@ defmodule Weather.CLI do
   end up generating a table of weather data for a given weather station. 
   """
   
-  def run(argv) do
+  def main(argv) do
     argv
-    |> parse_args
-    |> process
+    |> parse_args()
+    |> process()
   end
   
   @doc """
@@ -28,7 +28,6 @@ defmodule Weather.CLI do
   def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ help: :boolean],
                                      aliases:  [ h:    :help   ])
-    IO.puts @default_tags
     case parse do
       { [help: true], _, _}            -> :help
       {_, [ station_id | [] ], _ }     -> { station_id, @default_tags }
@@ -45,7 +44,7 @@ defmodule Weather.CLI do
   
   def process({ station_id, tags }) do
     Weather.WeatherGov.fetch(station_id)
-    |> decode_response
+    |> decode_response()
     |> extract_values(tags)
     |> print_result(station_id)
   end
@@ -53,7 +52,7 @@ defmodule Weather.CLI do
   def decode_response( { :ok, xml } ), do: xml
   def decode_response( { :error, _} ) do
     IO.puts "Error fetching from w1.weather.gov."
-    Sytem.halt(2)
+    System.halt(2)
   end
   
   def extract_values(xml, tags) do
